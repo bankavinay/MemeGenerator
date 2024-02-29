@@ -7,9 +7,13 @@ import {
   MemeGeneratorForm,
   CustomLable,
   CustomInput,
-  
   GenerateButton,
+  CustomOption,
+  CustomSelect,
+  MemeContainer,
+  TextContent,
 } from './styledComponents'
+
 const fontSizesOptionsList = [
   {
     optionId: '8',
@@ -73,6 +77,7 @@ class MemeGenerator extends Component {
       bottomTextInput,
       acctivefrontSizeOptionId,
     } = this.state
+
     this.setState({
       bagroundImageUrl: bagroundImageUrlInput,
       topText: topTextInput,
@@ -87,6 +92,7 @@ class MemeGenerator extends Component {
       topTextInput,
       bottomTextInput,
     } = this.state
+
     return (
       <MemeGeneratorForm onSubmit={this.onGenerateMeme}>
         <CustomLable htmlFor="backgrondImageUrl">Image URL</CustomLable>
@@ -97,8 +103,51 @@ class MemeGenerator extends Component {
           onChange={this.onChangeBagroundImage}
           placeholder="Enter the Top URL"
         />
+        <CustomLable htmlFor="topText">Top Text</CustomLable>
+        <CustomInput
+          type="text"
+          id="topText"
+          value={topTextInput}
+          onChange={this.onChangeTopTextInput}
+          placeholder="Enter the Top Text"
+        />
+        <CustomLable htmlFor="bottomText">Bottom Text</CustomLable>
+        <CustomInput
+          type="text"
+          id="bottomText"
+          value={bottomTextInput}
+          onChange={this.onChangeBottomInput}
+          placeholder="Enter the Bottom Text"
+        />
+        <CustomLable htmlFor="select">Font Size</CustomLable>
+        <CustomSelect
+          id="select"
+          value={acctivefrontSizeOptionId}
+          onChange={this.onChangeFrontSizeOptionID}
+        >
+          {fontSizesOptionsList.map(each => (
+            <CustomOption key={each.optionId} value={each.optionId}>
+              {each.displayText}
+            </CustomOption>
+          ))}
+        </CustomSelect>
         <GenerateButton type="submit">Generate</GenerateButton>
       </MemeGeneratorForm>
+    )
+  }
+  renderMeme = () => {
+    const {backgroundImageUrl, topText, bottomText, activeFrontSizeId} =
+      this.state
+
+    return (
+      <MemeContainer data-testid="meme" backgroudImage={backgroundImageUrl}>
+        <TextContent activeFrontSizeId={activeFrontSizeId}>
+          {topText}
+        </TextContent>
+        <TextContent activeFrontSizeId={activeFrontSizeId}>
+          {bottomText}
+        </TextContent>
+      </MemeContainer>
     )
   }
 
@@ -108,6 +157,7 @@ class MemeGenerator extends Component {
         <MemeGeneratorContainer>
           <Heading>Meme Generator</Heading>
           <FormandMemeContainer>
+            {this.renderMeme()}
             {this.renderMemeGeneratorForm()}
           </FormandMemeContainer>
         </MemeGeneratorContainer>
